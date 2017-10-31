@@ -22,4 +22,9 @@ def post_detail(request, pk):
     }
     return render(request, 'blog/post_detail.html', context=context)
 
-t_create.html', context=context)
+def post_create(request):
+
+    context = {
+
+    }
+    return render(request , 'blog/post_create.html', context=context)
