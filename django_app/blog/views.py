@@ -21,3 +21,5 @@ def post_detail(request, pk):
         'post': post,
     }
     return render(request, 'blog/post_detail.html', context=context)
+
+t_create.html', context=context)
