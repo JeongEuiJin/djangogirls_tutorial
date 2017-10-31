@@ -1,8 +1,15 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils import timezone
+
+from blog.models import Post
 
 
-# Create your views here.
 def post_list(request):
-    # return HttpResponse('Post List')
-    return render(request,'blog/post_list.html')
+    # posts = Post.objects.all()
+    posts = Post.objects.filter(published_date__lte=timezone.now())
+    context = {
+        'title': 'Django from djangogirls',
+        'posts': posts,
+    }
+    return render(request, 'blog/post_list.html', context=context)
