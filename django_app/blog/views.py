@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
 
-from blog.models import Post
+from .forms import PostCreateForm
+from .models import Post
 
 User = get_user_model()
 
@@ -28,18 +29,25 @@ def post_detail(request, pk):
 
 def post_create(request):
     if request.method == 'GET':
+        form = PostCreateForm()
         context = {
-
+            'form': form,
         }
         return render(request, 'blog/post_create.html', context=context)
     elif request.method == 'POST':
-        data = request.POST
-        title = data['title']
-        text = data['text']
-        user = User.objects.first()
-        post = Post.objects.create(
-            author=user,
-            title=title,
-            text=text
-        )
-        return redirect('post_detail', pk=post.pk)
+        form = PostCreateForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            text = form.cleaned_data['text']
+            user = User.objects.first()
+            post = Post.objects.create(
+                author=user,
+                title=title,
+                text=text
+            )
+            return redirect('post_detail', pk=post.pk)
+        else:
+            context = {
+                'form':form,
+            }
+            return render(request, 'blog/post_create.html', context=context)
